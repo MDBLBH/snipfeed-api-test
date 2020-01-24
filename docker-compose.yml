@@ -1,0 +1,27 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    command: --wiredTigerCacheSizeGB 2
+    environment:
+      - MONGO_INITDB_DATABASE=snipfeed
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=toor
+    volumes:
+      - ./contents.json:/sample/contents.json
+      - ./contents_sample.json:/sample/contents_sample.json
+      - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+      - ~/compose-data/snipfeed/mongo:/data/db
+  snip-api:
+    build: .
+    restart: always
+    environment:
+      NODE_ENV: development
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    links:
+      - mongo

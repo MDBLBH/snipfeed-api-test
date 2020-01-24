@@ -1,0 +1,1 @@
+mongoimport --db snipfeed --collection cards --type json  --authenticationDatabase admin --username root --password toor --drop --file /sample/contents_sample.json
